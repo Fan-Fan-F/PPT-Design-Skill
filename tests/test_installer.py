@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import tempfile
+import json
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -10,6 +13,18 @@ from installer.install import SOURCE, copy_bundle, installed_package_version
 
 
 class InstallerBundleTests(unittest.TestCase):
+    def test_cli_reports_manifest_version_without_installing(self) -> None:
+        root = SOURCE.parent
+        manifest = json.loads((root / "skill.json").read_text(encoding="utf-8"))
+        result = subprocess.run(
+            [sys.executable, str(root / "installer/install.py"), "--no-global", "--no-pip"],
+            check=True, capture_output=True, text=True, encoding="utf-8",
+        )
+        self.assertIn(
+            f"Installed ppt-design-skill {manifest['version']}: 0 skill bundle(s).",
+            result.stdout,
+        )
+
     def test_installed_package_version_is_read_only(self) -> None:
         self.assertIsNotNone(installed_package_version("pptx-designer"))
         self.assertIsNone(installed_package_version("package-that-does-not-exist"))

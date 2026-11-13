@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 from importlib.metadata import PackageNotFoundError, version as package_version
 import platform as host_platform
 import shutil
@@ -17,8 +18,8 @@ except ModuleNotFoundError:  # direct execution: python installer/install.py
     from platforms import PLATFORMS, global_path, normalize, project_path
 
 SKILL_NAME = "ppt-design-skill"
-SKILL_VERSION = "1.4"
 ROOT = Path(__file__).resolve().parents[1]
+SKILL_VERSION = json.loads((ROOT / "skill.json").read_text(encoding="utf-8"))["version"]
 SOURCE = ROOT / "skill"
 
 
