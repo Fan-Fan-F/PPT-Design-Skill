@@ -21,6 +21,8 @@ jobs:
 
       - name: Install runtime dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils
           pip install --upgrade pip
           pip install pptx-designer python-pptx Pillow
 
